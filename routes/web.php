@@ -19,4 +19,17 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//qui gestiamo tutte le rotte per l'autenticazione
+Route::middleware('auth')
+    ->namespace('Admin')
+    ->name('admin.')
+    ->prefix('admin')
+    ->group(function () {
+        Route::get('/', 'HomeController@index')
+            ->name('home');
+    });
+
+//Qui gestiamo tutte le rotte che non usano un autenticazione
+Route::get('{any?}', function () {
+    return view('guest.home');
+})->where("any", ".*");
